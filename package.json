@@ -1,5 +1,5 @@
 {
-  "name": "usersEvents-nodeServer",
+  "name": "events-nodeserver",
   "version": "1.0.0",
   "description": "Node.js (Express.js) server for users and their events coonected to MongoDB",
   "main": "index.js",
