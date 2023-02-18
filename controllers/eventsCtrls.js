@@ -1,48 +1,76 @@
-const { Event } = require("../models/eventModel");
+const {
+  getEvents,
+  addEvent,
+  removeEvent,
+} = require("../servises/eventsServices");
 
-const ctrlGetEvents = async (req, res, next) => {
-  const { _id } = req.user;
-  const { page = 1, limit = 20, favorite = null } = req.query;
+const { noDataByIdError } = require("../helpers/errorHandlers");
+const { successAddData } = require("../helpers/successResult");
+
+const ctrlGetEventsByUserId = async (req, res, next) => {
+  const { userId } = req.params;
+  const { page = 1, limit = 20 } = req.query;
 
   try {
-    const result = await getContacts(_id, page, limit);
+    const result = await getEvents(userId, page, limit);
 
-    if (favorite === "false") {
-      const filtredResult = result.filter((elem) => elem.favorite === false);
-
-      successResult(res, 200, "list of contacts", filtredResult);
-
-      return;
-    }
-
-    if (favorite === "true") {
-      const filtredResult = result.filter((elem) => elem.favorite === true);
-
-      successResult(res, 200, "list of contacts", filtredResult);
-      return;
-    }
-
-    if (!result.length) {
-      return res.status(404).json({
-        message: "no data found",
-        code: 404,
+    if (result) {
+      return res.json({
+        message: "user",
+        code: 200,
+        data: result,
       });
     }
 
-    successResult(res, 200, "list of contacts", result);
+    noDataByIdError(res);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     next(error);
   }
 };
 
-const getContacts = async (userId, page, limit, favorite) => {
-  const skip = (page - 1) * limit;
-  const contacts = await Event.find({ owner: userId }, "", {
-    skip,
-    limit: Number(limit),
-  }).populate("owner", "_id name email");
-  return contacts;
+const ctrlAddEvent = async (req, res, next) => {
+  const { userId } = req.params;
+  const { title, description, startDate, endDate } = req.body;
+
+  try {
+    const newEvent = {
+      title,
+      description,
+      startDate,
+      endDate,
+    };
+
+    await addEvent(newEvent, userId);
+    successAddData(res, 201, "event created");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };
 
-module.exports = ctrlGetEvents;
+const ctrlRemoveEvent = async (req, res, next) => {
+  try {
+    const { eventId } = req.params;
+    const result = await removeEvent(eventId);
+
+    if (result) {
+      return res.json({
+        message: `event by id: '${eventId}' deleted`,
+        code: 200,
+        data: result,
+      });
+    }
+
+    noDataByIdError(res);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+module.exports = {
+  ctrlGetEventsByUserId,
+  ctrlAddEvent,
+  ctrlRemoveEvent,
+};

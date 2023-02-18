@@ -6,10 +6,11 @@ const successResult = (res, code, message, result) => {
   });
 };
 
-const successAddData = (res, code, message) => {
+const successAddData = (res, code, message, result) => {
   return res.json({
     message,
     code,
+    data: result,
   });
 };
 

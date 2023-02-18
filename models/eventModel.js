@@ -22,15 +22,15 @@ const eventModel = new Schema(
       type: String,
       required: [true, "Set end date"],
     },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",   ?customer
-    //   required: true,
-    // },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const Event = model("contact", eventModel);
+const Event = model("event", eventModel);
 
 module.exports = { Event };
