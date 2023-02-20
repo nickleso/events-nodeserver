@@ -1,7 +1,7 @@
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 
 const mongoose = require("mongoose");
-
 mongoose.set("strictQuery", false);
 
 const uriDb = process.env.MONGODB_URL;
