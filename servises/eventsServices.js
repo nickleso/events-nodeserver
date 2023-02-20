@@ -19,6 +19,9 @@ const addEvent = async ({ title, description, startDate, endDate }, userId) => {
   });
 
   await event.save();
+
+  // findUserByIdAndUpdate(eventCount + 1 ) ?
+
   return event;
 };
 

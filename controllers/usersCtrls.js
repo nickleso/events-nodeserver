@@ -9,8 +9,11 @@ const { noDataByIdError } = require("../helpers/errorHandlers");
 const { successResult, successAddData } = require("../helpers/successResult");
 
 const ctrlGetAllUsers = async (req, res, next) => {
+  const { page = 1, limit = 5 } = req.query;
+
   try {
-    const result = await getAllUsers();
+    console.log(page, limit);
+    const result = await getAllUsers(page, limit);
 
     if (!result.length) {
       return res.status(404).json({

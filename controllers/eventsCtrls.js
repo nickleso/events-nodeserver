@@ -9,7 +9,7 @@ const { successAddData } = require("../helpers/successResult");
 
 const ctrlGetEventsByUserId = async (req, res, next) => {
   const { userId } = req.params;
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 5 } = req.query;
 
   try {
     const result = await getEvents(userId, page, limit);
