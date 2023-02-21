@@ -12,7 +12,6 @@ const ctrlGetAllUsers = async (req, res, next) => {
   const { page = 1, limit = 5 } = req.query;
 
   try {
-    console.log(page, limit);
     const result = await getAllUsers(page, limit);
 
     if (!result.length) {

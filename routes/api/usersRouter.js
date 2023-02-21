@@ -28,7 +28,7 @@ router.post("/", addUsersValidation, ctrlAddUser);
 
 router.delete("/:userId", ctrlRemoveUser);
 
-// events routes
+// users events routes
 
 router.get("/:userId/events", ctrlGetEventsByUserId);
 

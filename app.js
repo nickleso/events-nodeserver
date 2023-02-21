@@ -3,7 +3,6 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const usersRouter = require("./routes/api/usersRouter");
-// const eventsRouter = require("./routes/api/eventsRouter");
 
 const {
   noDataByIdError,
@@ -20,14 +19,12 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", usersRouter);
-// app.use("/api/events", eventsRouter);
-// app.use("/api/users", authRouter); ? auth
 
 app.use((req, res) => {
   res.status(404).json({
     status: "error",
     code: 404,
-    message: "Use api on routes: /api/events or /api/users",
+    message: "Use api on routes: /api",
     data: "Not found",
   });
 });

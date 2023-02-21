@@ -1,4 +1,5 @@
 const { Event } = require("../models/eventModel");
+const { User } = require("../models/userModel");
 
 const getEvents = async (userId, page, limit) => {
   const skip = (page - 1) * limit;
@@ -20,13 +21,18 @@ const addEvent = async ({ title, description, startDate, endDate }, userId) => {
 
   await event.save();
 
-  // findUserByIdAndUpdate(eventCount + 1 ) ?
+  const eventsTotal = await Event.estimatedDocumentCount({ owner: userId });
+  await User.findByIdAndUpdate({ _id: userId }, { eventsCount: eventsTotal });
 
   return event;
 };
 
-const removeEvent = async (eventId) => {
+const removeEvent = async (userId, eventId) => {
   const event = await Event.findByIdAndRemove({ _id: eventId });
+
+  const eventsTotal = await Event.estimatedDocumentCount({ owner: userId });
+  await User.findByIdAndUpdate({ _id: userId }, { eventsCount: eventsTotal });
+
   return event;
 };
 

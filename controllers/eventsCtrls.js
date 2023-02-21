@@ -14,6 +14,13 @@ const ctrlGetEventsByUserId = async (req, res, next) => {
   try {
     const result = await getEvents(userId, page, limit);
 
+    if (!result.length) {
+      return res.status(404).json({
+        message: "no events found",
+        code: 404,
+      });
+    }
+
     if (result) {
       return res.json({
         message: "user",
@@ -52,7 +59,8 @@ const ctrlAddEvent = async (req, res, next) => {
 const ctrlRemoveEvent = async (req, res, next) => {
   try {
     const { eventId } = req.params;
-    const result = await removeEvent(eventId);
+    const { userId } = req.params;
+    const result = await removeEvent(userId, eventId);
 
     if (result) {
       return res.json({
